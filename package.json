@@ -1,0 +1,22 @@
+{
+"name": "FacebookGalery",
+"author": "Fedotov Vsevolod",
+"version": "0.0.1",
+"description": "FacebookGalery",
+"main": "server.js",
+"repository": "ssh://57b0804c7628e1f9fe0000d7@facebookgaleryapp-sevas727.rhcloud.com/~/git/facebookgaleryapp.git/",
+"scripts": {
+"postinstall": "bower install",
+"prestart": "npm install",
+"start": "node --use_strict start.js"
+},
+"dependencies": {
+"body-parser": "^1.15.2",
+"busboy": "^0.2.13",
+"express": "^4.14.0",
+"request": "^2.74.0",
+"serve-favicon": "^2.3.0",
+"bower": "^1.7.9"
+}
+}
+

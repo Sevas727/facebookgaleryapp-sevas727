@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+  <head>
+    <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Google Phone Gallery</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+
+         <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css" type="text/css" media="screen"/>
+         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+         <link rel="stylesheet" href="bower_components/dropzone/dist/min/basic.min.css"/>
+         <link rel="stylesheet" href="bower_components/dropzone/dist/min/dropzone.min.css"/>
+      <link rel="stylesheet" href="css/style.css" />
+      <link href='https://fonts.googleapis.com/css?family=Neucha|PT+Serif&subset=latin,cyrillic,cyrillic-ext' rel='stylesheet' type='text/css'>
+
+  </head>
+  <body>
+
+
+  <!--[if lt IE 7]>
+  <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+      your browser</a> to improve your experience.</p>
+  <![endif]-->
+  <div class="document-wrapper">
+      <div class="main-wrapper pl15 pr15" id="container">
+          <div ng-view class="view-area pt15"></div>
+      </div>
+  </div>
+
+  </div>
+
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  <script src="bower_components/angular-loading-bar/src/loading-bar.js"></script>
+  <script src="bower_components/dropzone/dist/min/dropzone.min.js"></script>
+
+
+
+  <script src="app.module.js"></script>
+  <script src="app.config.js"></script>
+  <script src="app.animations.js"></script>
+  <script src="bower_components/ng-facebook/ngFacebook.js"></script>
+
+
+  <script src="controllers/auth-component.js"></script>
+  <script src="controllers/albums-component.js"></script>
+  <script src="controllers/album-component.js"></script>
+  <script src="controllers/photo-component.js"></script>
+  <script src="controllers/upload-component.js"></script>
+
+  <script src="directives/imagePreloaderDrct.js"></script>
+  <script src="directives/dropzoneDrct.js"></script>
+
+  <script src="services/facebookApiSvc.js"></script>
+
+  <script src="appControllers.js"></script>
+
+
+
+  </body>
+</html>

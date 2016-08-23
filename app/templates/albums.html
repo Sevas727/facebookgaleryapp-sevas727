@@ -1,0 +1,30 @@
+<div >
+<ul ng-include="'templates/menu.html'" class="nav nav-tabs tab--list" role="tablist"></ul>
+
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="home">
+      <p class="user-name-string">Welcome, {{userName}}.</p>
+      <div class="album--list">
+        <div class="album--item flex-container" ng-repeat="album in albums">
+          <div class="dib album--thumb-wrapper flex-fixed">
+            <img preloader src="{{album.picture.data.url}}" class="album--thumb-image" alt="">
+            <span class="loading"><img src="img/preloader64.gif"/></span>
+            <span class="srcFail"><img src="img/no_img64.gif"/></span>
+          </div>
+          <div class="flex-column">
+            <div class="dib album--details flex-flex"><h4><a href="#/album/{{album.id}}/{{album.name}}/" rel='nofollow'>{{album.name}}</a></h4>
+              <p><i class="fa fa-picture-o" aria-hidden="true"></i> Size: {{album.count}}</p>
+              <p><i class="fa fa-clock-o" aria-hidden="true"></i></i> Created: {{album.created_time | date : "MM/dd/yyyy 'at' HH:mm"}}</p>
+              <p><i class="fa fa-refresh" aria-hidden="true"></i> Updated: {{album.updated_time | date : "MM/dd/yyyy 'at' HH:mm"}}</p>
+            </div>
+            <div class="dib album--link-direction-wrapper flex-fixed">
+              <a class='album--link-direction' href="#/album/{{album.id}}/{{album.name}}/" rel='nofollow'>
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
