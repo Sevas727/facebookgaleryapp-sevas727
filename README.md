@@ -1,6 +1,6 @@
 <h1>Facebook Gallery</h1>
 <h3>Тестовое задание для позиции Frontend developer/Javascript developer</h3>
-<h3><a href="http://facebookgaleryapp-sevas727.rhcloud.com/">Full demo</a></h3>
+<h3><a href="http://fappgallery-sevas727.rhcloud.com/">Full demo</a></h3>
 
 
 Требуется сделать single-page web-страницу, которая посредством API одного
@@ -38,8 +38,3 @@
   </li>
 </ol>
 
-<h4>Деплой:</h4>
-<ul>
-<li><strong>Set your app ID</strong></li>
-<li><strong>npm install</strong></li>
-</ul>

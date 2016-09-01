@@ -10,7 +10,7 @@ run.$inject = ['$rootScope'];
 
 function config($routeProvider, $facebookProvider, $locationProvider) {
     $facebookProvider
-        .setAppId("<-- your app ID -->");
+        .setAppId("333688740303109");
     $facebookProvider
         .setPermissions("email,public_profile, user_posts, publish_actions, user_photos");
 
