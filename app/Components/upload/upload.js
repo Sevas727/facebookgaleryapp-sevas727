@@ -1,43 +1,40 @@
 /**
  * Created by User on 09.02.2017.
  */
-import angular from "angular";
-import uiRouter from 'angular-ui-router';
 
-export default angular.module('upload',[uiRouter])
+export default (function() {
+    return angular.module('upload',[])
+                .config(($stateProvider) => {
+                    $stateProvider
+                        .state('upload', {
+                            url: '/upload',
+                            template:  '<upload/>',
+                        });
+                })
+                .component('upload', {
+                    template: require('./upload.html'),
+                    controllerAs: 'vm',
+                    controller: function(facebookApiSvc, $rootScope) {
 
-    .config(($stateProvider) => {
+                        let vm = this;
 
-        $stateProvider
-            .state('upload', {
-                url: '/upload',
-                template:  '<upload/>',
-            });
-    })
+                        $rootScope.section = 'upload';
+                        vm.currentAlbum = "";
 
-    .component('upload', {
-        template: require('./upload.html'),
-        controllerAs: 'vm',
-        controller: function(facebookApiSvc, $rootScope) {
+                        facebookApiSvc.getAlbumsID()
+                            .then(function(data) {
+                                vm.albums = data;
+                            });
 
-            let vm = this;
+                        vm.catchFile = function(file){
 
-            $rootScope.section = 'upload';
-            vm.currentAlbum = "";
+                        }
 
-            facebookApiSvc.getAlbumsID()
-                .then(function(data) {
-                    vm.albums = data;
+                        vm.sendImg = facebookApiSvc.sendImg
+
+                    }
                 });
-
-            vm.catchFile = function(file){
-
-            }
-
-            vm.sendImg = facebookApiSvc.sendImg
-
-        }
-    });
+})();
     /*
     .directive('dropzone', dropzone);
 

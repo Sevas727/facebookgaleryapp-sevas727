@@ -1,25 +1,24 @@
 /**
  * Created by User on 07.02.2017.
  */
-import angular from "angular";
-import uiRouter from 'angular-ui-router';
 
-export default angular.module('albums',[uiRouter])
+export default (function() {
+    return angular.module('albums',[])
 
-    .config(($stateProvider) => {
+        .config(($stateProvider) => {
             $stateProvider
                 .state('albums', {
                     url: '/albums',
                     template:  '<albums/>',
                 });
-    })
+        })
 
-    .component('albums', {
-        template: require('./albums.html'),
-        controllerAs: 'vm',
-        controller: function ($rootScope, facebookApiSvc) {
+        .component('albums', {
+            template: require('./albums.html'),
+            controllerAs: 'vm',
+            controller: function ($rootScope, facebookApiSvc) {
 
-            let vm = this;
+                let vm = this;
 
                 $rootScope.section = 'view';
 
@@ -32,5 +31,6 @@ export default angular.module('albums',[uiRouter])
                         vm.albums = data;
                     });
             }
-    });
+        });
+})();
 

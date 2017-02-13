@@ -1,28 +1,30 @@
-'use strict';
+export default (function() {
+  return angular.module('imagePreloaderDrct', [])
 
-export default angular.module('imagePreloaderDrct', [])
+      .directive('preloader', preloader);
 
-  .directive('preloader', function () {
-    return {
-      restrict: 'A',
-      link: function (scope, element, attrs) {
-        if (attrs.ngSrc == undefined) {
-          //On Fail
-          element.hide();
-          element.addClass('spinner-show');
-          element.parent().addClass('srcFailShow');
-        } else {
-          //On Load
-          element.on('load', function () {
-            element.removeClass('spinner-hide');
-            element.addClass('spinner-show');
-          });
-          //When image is loaded
-          scope.$watch('ngSrc', function () {
-            element.removeClass('spinner-show');
-            element.addClass('spinner-hide');
-          });
-        }
+      function preloader() {
+        return {
+          restrict: 'A',
+          link: function (scope, element, attrs) {
+            if (attrs.ngSrc == undefined) {
+              //On Fail
+              element.hide();
+              element.addClass('spinner-show');
+              element.parent().addClass('srcFailShow');
+            } else {
+              //On Load
+              element.on('load', function () {
+                element.removeClass('spinner-hide');
+                element.addClass('spinner-show');
+              });
+              //When image is loaded
+              scope.$watch('ngSrc', function () {
+                element.removeClass('spinner-show');
+                element.addClass('spinner-hide');
+              });
+            }
+          }
+        };
       }
-    };
-  });
+})();
