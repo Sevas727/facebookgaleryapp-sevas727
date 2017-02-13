@@ -42,6 +42,10 @@ myApp.config(function($logProvider){
 });
 
 
+myApp.config(function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('/auth');
+});
+
 myApp.run(function(){
         // Code from FBook JS SDK
         (function(d, s, id) {
@@ -62,6 +66,7 @@ myApp.run(function($rootScope, $state, facebookApiSvc, $location){
     $rootScope.$location = $location;
 
     $rootScope.$on('$stateChangeStart', function (event, toState){
+
       if(facebookApiSvc.isAuth == false && toState.name != 'auth') {
           event.preventDefault();
                 $state.go('auth');
