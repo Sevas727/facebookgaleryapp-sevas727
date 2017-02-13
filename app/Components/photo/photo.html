@@ -1,0 +1,24 @@
+<div>
+
+    <menu></menu>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="home">
+            <p class="user-name-string">
+                <a ui-sref="album({albumId: vm.albumId, albumName: vm.albumName})" rel='nofollow' class="color_inherit"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+                <i class="fa fa-folder" aria-hidden="true"></i>
+                {{vm.albumName}}
+            </p>
+
+            <div class="photo--image-wrapper">
+                <img ng-src="{{vm.imgSrc}}" class="photo--image" alt="">
+            </div>
+            <div class="photo--description">
+                <table class="photo-details--table">
+                    <tr><td class="photo-details--col1">Created:</td><td>{{vm.imgCreatedTime | date: 'MM/dd/yyyy'}}</td></tr>
+                    <tr><td class="photo-details--col1">Description:</td><td>{{vm.imgName}}</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

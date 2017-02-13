@@ -1,0 +1,30 @@
+<div>
+    <menu></menu>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="upload">
+            <p class="user-name-string">Upload your photo</p>
+            <div class="album--list">
+
+                <div class="form-group">
+                    <label for="sel1">Select an album:</label>
+                    <select id="album-select" class="form-control" id="sel1" ng-model="vm.currentAlbum" ng-change="selectAlbum()">
+                        <option value="" disabled selected>Please click here and select an album</option>
+                        <option ng-repeat="album in vm.albums" value="{{album.id}}">{{album.name}}</option>
+                    </select>
+                </div>
+
+                <form action="http://facebookgaleryapp-sevas727.rhcloud.com/upload"
+                      dropzone
+                      ng-model="currentAlbum"
+                      class="dropzone"
+                      method="POST"
+                      id="upload-Invoices" data-ajax-method="POST" data-ajax="true">
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+</div>

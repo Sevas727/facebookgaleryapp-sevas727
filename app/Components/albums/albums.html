@@ -1,0 +1,31 @@
+<div>
+  <div class="tab-content">
+
+    <menu></menu>
+
+    <div role="tabpanel" class="tab-pane active" id="home">
+      <p class="user-name-string">Welcome, {{vm.userName}}.</p>
+      <div class="album--list">
+        <div class="album--item flex-container" ng-repeat="album in vm.albums">
+          <div class="dib album--thumb-wrapper flex-fixed">
+            <img preloader ng-src="{{album.picture.data.url}}" class="album--thumb-image" alt="">
+            <span class="loading"><img src="../../../styles/img/preloader64.gif"/></span>
+            <span class="srcFail"><img src="../../../styles/img/no_img64.gif"/></span>
+          </div>
+          <div class="flex-column">
+            <div class="dib album--details flex-flex"><h4><a ui-sref="album({ albumId: album.id, albumName: album.name })" rel='nofollow'>{{album.name}}</a></h4>
+              <p><i class="fa fa-picture-o" aria-hidden="true"></i> Size: {{album.count}}</p>
+              <p><i class="fa fa-clock-o" aria-hidden="true"></i></i> Created: {{album.created_time | date : "MM/dd/yyyy 'at' HH:mm"}}</p>
+              <p><i class="fa fa-refresh" aria-hidden="true"></i> Updated: {{album.updated_time | date : "MM/dd/yyyy 'at' HH:mm"}}</p>
+            </div>
+            <div class="dib album--link-direction-wrapper flex-fixed">
+              <a class='album--link-direction' ui-sref="album({ albumId: album.id, albumName: album.name })" rel='nofollow'>
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

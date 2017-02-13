@@ -1,0 +1,26 @@
+<ul class="nav nav-tabs tab--list" role="tablist">
+  <li role="presentation" ng-class="vm.section == 'view' ? 'active' : ''">
+    <a ui-sref="albums" aria-controls="albums" role="tab" data-toggle="tab"><i class="fa fa-picture-o" aria-hidden="true"></i></a>
+  </li>
+  <li role="presentation">
+    <a href="#" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-windows" aria-hidden="true"></i></a>
+  </li>
+  <li role="presentation">
+    <a href="#" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-map-marker" aria-hidden="true"></i></a>
+  </li>
+  <li role="presentation">
+    <a href="#" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-comment" aria-hidden="true"></i></a>
+  </li>
+  <li role="presentation">
+    <a href="#" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-square-o" aria-hidden="true"></i></a>
+  </li>
+  <li role="presentation">
+    <a href="#" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-flag" aria-hidden="true"></i></a>
+  </li>
+  <li role="presentation" ng-class="vm.section == 'upload' ? 'active' : ''">
+    <a ui-sref="upload" aria-controls="upload" role="tab" data-toggle="tab"><i class="fa fa-upload" aria-hidden="true"></i></a>
+  </li>
+  <li>
+    <a href="" ng-click="vm.logout()">Log Out</a>
+  </li>
+</ul>

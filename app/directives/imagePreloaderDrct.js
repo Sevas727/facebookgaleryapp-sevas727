@@ -1,12 +1,12 @@
 'use strict';
 
-angular.module('imagePreloaderDrct', [])
+export default angular.module('imagePreloaderDrct', [])
 
   .directive('preloader', function () {
     return {
       restrict: 'A',
       link: function (scope, element, attrs) {
-        if (attrs.src == undefined) {
+        if (attrs.ngSrc == undefined) {
           //On Fail
           element.hide();
           element.addClass('spinner-show');
