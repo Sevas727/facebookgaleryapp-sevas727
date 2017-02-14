@@ -14,11 +14,11 @@ export default (function() {
         .component('album', {
             template: require('./album.html'),
             controllerAs: 'vm',
-            controller: function($rootScope, facebookApiSvc, $stateParams) {
+            controller: function(facebookApiSvc, $stateParams) {
 
                 let vm = this;
 
-                $rootScope.section = 'view';
+                vm.section = 'view';
                 vm.albumId = $stateParams.albumId;
                 vm.albumName = $stateParams.albumName;
                 vm.flagEndPhotoDownload = false;
@@ -27,7 +27,10 @@ export default (function() {
 
                 vm = facebookApiSvc.getPhotos(vm);
 
-                vm.scroll = function(elem){
+                vm.scroll = scroll ;
+
+
+                function scroll(elem){
 
                     elem.height(document.documentElement.clientHeight - 210);
                     elem[0].onscroll = function() {

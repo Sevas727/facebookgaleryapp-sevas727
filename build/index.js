@@ -3749,7 +3749,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             $rootScope.$on('$stateChangeStart', function (event, toState) {
 
-                if (facebookApiSvc.isAuth == false && toState.name != 'auth') {
+                if (facebookApiSvc.check() == false && toState.name != 'auth') {
                     event.preventDefault();
                     $state.go('auth');
                 }
@@ -3823,11 +3823,11 @@ define(String.prototype, "padRight", "".padEnd);
         .component('album', {
             template: __webpack_require__(347),
             controllerAs: 'vm',
-            controller: function($rootScope, facebookApiSvc, $stateParams) {
+            controller: function(facebookApiSvc, $stateParams) {
 
                 let vm = this;
 
-                $rootScope.section = 'view';
+                vm.section = 'view';
                 vm.albumId = $stateParams.albumId;
                 vm.albumName = $stateParams.albumName;
                 vm.flagEndPhotoDownload = false;
@@ -3836,7 +3836,10 @@ define(String.prototype, "padRight", "".padEnd);
 
                 vm = facebookApiSvc.getPhotos(vm);
 
-                vm.scroll = function(elem){
+                vm.scroll = scroll ;
+
+
+                function scroll(elem){
 
                     elem.height(document.documentElement.clientHeight - 210);
                     elem[0].onscroll = function() {
@@ -3884,20 +3887,27 @@ define(String.prototype, "padRight", "".padEnd);
         .component('albums', {
             template: __webpack_require__(348),
             controllerAs: 'vm',
-            controller: function ($rootScope, facebookApiSvc) {
+            controller: function (facebookApiSvc) {
 
                 let vm = this;
+                    vm.section = 'view';
 
-                $rootScope.section = 'view';
+                getName();
+                getAlbums();
 
-                facebookApiSvc.getName()
-                    .then(function(data) {
-                        vm.userName = data;
-                    });
-                facebookApiSvc.getAlbums()
-                    .then(function(data) {
-                        vm.albums = data;
-                    });
+                function getName() {
+                    facebookApiSvc.getName()
+                        .then(function (data) {
+                            vm.userName = data;
+                        });
+                }
+
+                function getAlbums() {
+                    facebookApiSvc.getAlbums()
+                        .then(function(data) {
+                            vm.albums = data;
+                        });
+                }
             }
         });
 })();
@@ -3930,12 +3940,10 @@ define(String.prototype, "padRight", "".padEnd);
             controllerAs: 'vm',
             controller: function(facebookApiSvc){
 
-                this.login = facebookApiSvc.login;
+                let vm = this;
+                    vm.login = facebookApiSvc.login;
 
-            },
-            /*bindings: {
-             count: '='
-             }*/
+            }
         });
 })();
 
@@ -3987,10 +3995,13 @@ define(String.prototype, "padRight", "".padEnd);
         .component('menu', {
             template: __webpack_require__(350),
             controllerAs: 'vm',
-            controller: function($rootScope, facebookApiSvc){
-                this.section = $rootScope.section;
-                this.logout = facebookApiSvc.logout;
+            bindings: {
+                section: '<'
+            },
+            controller: function(facebookApiSvc){
 
+                let vm = this;
+                vm.logout = facebookApiSvc.logout;
             }
         });
 })();
@@ -4022,24 +4033,36 @@ define(String.prototype, "padRight", "".padEnd);
             controller: function($stateParams, facebookApiSvc) {
 
                 let vm = this;
-
+                vm.imgName, vm.images, vm.imgSrc;
                 vm.section = 'view';
                 vm.albumId = $stateParams.albumId;
                 vm.albumName = $stateParams.albumName;
                 vm.imgId = $stateParams.imgId;
                 vm.imgCreatedTime = $stateParams.imgCreatedTime;
-                vm.imgName;
+                vm.closestResolution = closestResolution;
 
-                vm.closestResolution = function(imagesArr){
+                getImage();
 
-                    if(imagesArr.length == 0) return;
+                function getImage() {
+                    facebookApiSvc.getImage(vm.imgId)
+                        .then((response) => {
+                            vm.imgName = response.name;
+                            vm.images = response.images;
+                            vm.imgSrc = vm.closestResolution(vm.images);
+                        })
+                }
 
-                    var closestLeft,
+                
+                function closestResolution(imagesArr) {
+
+                    if (imagesArr.length == 0) return;
+
+                    let closestLeft,
                         closestRight,
                         number = window.innerWidth,
                         current;
 
-                    for (var i = 0; i < imagesArr.length; i++) {
+                    for (let i = 0; i < imagesArr.length; i++) {
                         current = imagesArr[i].width;
                         if (imagesArr[i].width < number && (typeof closestLeft === 'undefined' || closestLeft.width < imagesArr[i].width)) {
                             closestLeft = imagesArr[i];
@@ -4049,14 +4072,6 @@ define(String.prototype, "padRight", "".padEnd);
                     }
                     return closestLeft.source;
                 }
-
-                facebookApiSvc.getImage(vm.imgId)
-                    .then((response) => {
-                        vm.imgName = response.name;
-                        vm.images = response.images;
-                        vm.imgSrc = vm.closestResolution(vm.images);
-                    })
-
             }
         })
 })();
@@ -4082,24 +4097,21 @@ define(String.prototype, "padRight", "".padEnd);
                 .component('upload', {
                     template: __webpack_require__(352),
                     controllerAs: 'vm',
-                    controller: function(facebookApiSvc, $rootScope) {
+                    controller: function(facebookApiSvc) {
 
                         let vm = this;
+                            vm.section = 'upload';
+                            vm.sendImg = facebookApiSvc.sendImg;
+                            vm.currentAlbum = "";
 
-                        $rootScope.section = 'upload';
-                        vm.currentAlbum = "";
+                        getAlbumsID();
 
-                        facebookApiSvc.getAlbumsID()
-                            .then(function(data) {
-                                vm.albums = data;
-                            });
-
-                        vm.catchFile = function(file){
-
+                        function getAlbumsID(){
+                            facebookApiSvc.getAlbumsID()
+                                .then(function(data) {
+                                    vm.albums = data;
+                                });
                         }
-
-                        vm.sendImg = facebookApiSvc.sendImg
-
                     }
                 });
 })();
@@ -4322,20 +4334,16 @@ function dropzone() {
             },
 
             this.check = function () {
-                if (this.isAuth == true) {
-                    return true;
-                } else {
-                    return false
-                }
-                ;
 
                 $facebook.getLoginStatus()
-                    .then((response)=> {
-                        return response;
-                        if (response.status == "connected") {
+                    .then((res) => {
+                        
+                        if (this.isAuth == true && res.status == "connected") {
                             return true;
-                        }
-                        return false;
+                        } else {
+                            return false
+                        };
+
                     });
 
             },
@@ -58490,13 +58498,13 @@ module.exports = __webpack_require__.p + "spinner.gif";
 /* 347 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = "<div>\r\n\r\n  <menu></menu>\r\n\r\n  <div class=\"tab-content\">\r\n    <div role=\"tabpanel\" class=\"tab-pane active\" id=\"home\">\r\n      <p class=\"user-name-string\">\r\n        <a ui-sref=\"albums\" rel='nofollow' class=\"color_inherit\"><i class=\"fa fa-chevron-left\" aria-hidden=\"true\"></i></a>\r\n        <i class=\"fa fa-folder\" aria-hidden=\"true\"></i>\r\n        {{vm.albumName}}\r\n      </p>\r\n      <div class=\"images--list\">\r\n        <div class=\"dib images--item\"\r\n             ng-repeat=\"image in vm.images\"\r\n             uib-popover-template=\"'popover.html'\"\r\n             popover-container='body'\r\n             popover-trigger=\"'mouseenter'\"\r\n             popover-placement=\"bottom\"\r\n             container=\"#container\"\r\n        >\r\n\r\n          <div class=\"images--thumb-wrapper\">\r\n            <img preloader ng-src=\"{{image.images[0].source}}\" class=\"images--thumb-image\" alt=\"\">\r\n            <span class=\"loading\"><img src=\"" + __webpack_require__(119) + "\"/></span>\r\n            <span class=\"srcFail\"><img src=\"" + __webpack_require__(118) + "\"/></span>\r\n          </div>\r\n          <div class=\"images--thumb-select-link\">\r\n\r\n            <a ui-sref=\"photo({imgId: image.id, imgCreatedTime: image.created_time, albumName: vm.albumName, albumId: vm.albumId})\" class=\"uline\">\r\n              <i class=\"fa fa-check blue m3\" aria-hidden=\"true\"></i>Select</a>\r\n          </div>\r\n        </div>\r\n        <div ng-show='flagEndPhotoDownload' class=\"loading-data\">Loading data...<img src=\"" + __webpack_require__(346) + "\" alt=\"\"></div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>";
+module.exports = "<div>\r\n\r\n  <menu section=\"vm.section\"></menu>\r\n\r\n  <div class=\"tab-content\">\r\n    <div role=\"tabpanel\" class=\"tab-pane active\" id=\"home\">\r\n      <p class=\"user-name-string\">\r\n        <a ui-sref=\"albums\" rel='nofollow' class=\"color_inherit\"><i class=\"fa fa-chevron-left\" aria-hidden=\"true\"></i></a>\r\n        <i class=\"fa fa-folder\" aria-hidden=\"true\"></i>\r\n        {{vm.albumName}}\r\n      </p>\r\n      <div class=\"images--list\">\r\n        <div class=\"dib images--item\"\r\n             ng-repeat=\"image in vm.images\"\r\n             uib-popover-template=\"'popover.html'\"\r\n             popover-container='body'\r\n             popover-trigger=\"'mouseenter'\"\r\n             popover-placement=\"bottom\"\r\n             container=\"#container\"\r\n        >\r\n\r\n          <div class=\"images--thumb-wrapper\">\r\n            <img preloader ng-src=\"{{image.images[0].source}}\" class=\"images--thumb-image\" alt=\"\">\r\n            <span class=\"loading\"><img src=\"" + __webpack_require__(119) + "\"/></span>\r\n            <span class=\"srcFail\"><img src=\"" + __webpack_require__(118) + "\"/></span>\r\n          </div>\r\n          <div class=\"images--thumb-select-link\">\r\n\r\n            <a ui-sref=\"photo({imgId: image.id, imgCreatedTime: image.created_time, albumName: vm.albumName, albumId: vm.albumId})\" class=\"uline\">\r\n              <i class=\"fa fa-check blue m3\" aria-hidden=\"true\"></i>Select</a>\r\n          </div>\r\n        </div>\r\n        <div ng-show='flagEndPhotoDownload' class=\"loading-data\">Loading data...<img src=\"" + __webpack_require__(346) + "\" alt=\"\"></div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>";
 
 /***/ }),
 /* 348 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = "<div>\r\n  <div class=\"tab-content\">\r\n\r\n    <menu></menu>\r\n\r\n    <div role=\"tabpanel\" class=\"tab-pane active\" id=\"home\">\r\n      <p class=\"user-name-string\">Welcome, {{vm.userName}}.</p>\r\n      <div class=\"album--list\">\r\n        <div class=\"album--item flex-container\" ng-repeat=\"album in vm.albums\">\r\n          <div class=\"dib album--thumb-wrapper flex-fixed\">\r\n            <img preloader ng-src=\"{{album.picture.data.url}}\" class=\"album--thumb-image\" alt=\"\">\r\n            <span class=\"loading\"><img src=\"" + __webpack_require__(119) + "\"/></span>\r\n            <span class=\"srcFail\"><img src=\"" + __webpack_require__(118) + "\"/></span>\r\n          </div>\r\n          <div class=\"flex-column\">\r\n            <div class=\"dib album--details flex-flex\"><h4><a ui-sref=\"album({ albumId: album.id, albumName: album.name })\" rel='nofollow'>{{album.name}}</a></h4>\r\n              <p><i class=\"fa fa-picture-o\" aria-hidden=\"true\"></i> Size: {{album.count}}</p>\r\n              <p><i class=\"fa fa-clock-o\" aria-hidden=\"true\"></i></i> Created: {{album.created_time | date : \"MM/dd/yyyy 'at' HH:mm\"}}</p>\r\n              <p><i class=\"fa fa-refresh\" aria-hidden=\"true\"></i> Updated: {{album.updated_time | date : \"MM/dd/yyyy 'at' HH:mm\"}}</p>\r\n            </div>\r\n            <div class=\"dib album--link-direction-wrapper flex-fixed\">\r\n              <a class='album--link-direction' ui-sref=\"album({ albumId: album.id, albumName: album.name })\" rel='nofollow'>\r\n                <i class=\"fa fa-angle-double-right\" aria-hidden=\"true\"></i>\r\n              </a>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>";
+module.exports = "<div>\r\n  <div class=\"tab-content\">\r\n\r\n    <menu section=\"vm.section\"></menu>\r\n\r\n    <div role=\"tabpanel\" class=\"tab-pane active\" id=\"home\">\r\n      <p class=\"user-name-string\">Welcome, {{vm.userName}}.</p>\r\n      <div class=\"album--list\">\r\n        <div class=\"album--item flex-container\" ng-repeat=\"album in vm.albums\">\r\n          <div class=\"dib album--thumb-wrapper flex-fixed\">\r\n            <img preloader ng-src=\"{{album.picture.data.url}}\" class=\"album--thumb-image\" alt=\"\">\r\n            <span class=\"loading\"><img src=\"" + __webpack_require__(119) + "\"/></span>\r\n            <span class=\"srcFail\"><img src=\"" + __webpack_require__(118) + "\"/></span>\r\n          </div>\r\n          <div class=\"flex-column\">\r\n            <div class=\"dib album--details flex-flex\"><h4><a ui-sref=\"album({ albumId: album.id, albumName: album.name })\" rel='nofollow'>{{album.name}}</a></h4>\r\n              <p><i class=\"fa fa-picture-o\" aria-hidden=\"true\"></i> Size: {{album.count}}</p>\r\n              <p><i class=\"fa fa-clock-o\" aria-hidden=\"true\"></i></i> Created: {{album.created_time | date : \"MM/dd/yyyy 'at' HH:mm\"}}</p>\r\n              <p><i class=\"fa fa-refresh\" aria-hidden=\"true\"></i> Updated: {{album.updated_time | date : \"MM/dd/yyyy 'at' HH:mm\"}}</p>\r\n            </div>\r\n            <div class=\"dib album--link-direction-wrapper flex-fixed\">\r\n              <a class='album--link-direction' ui-sref=\"album({ albumId: album.id, albumName: album.name })\" rel='nofollow'>\r\n                <i class=\"fa fa-angle-double-right\" aria-hidden=\"true\"></i>\r\n              </a>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>";
 
 /***/ }),
 /* 349 */
@@ -58514,13 +58522,13 @@ module.exports = "<ul class=\"nav nav-tabs tab--list\" role=\"tablist\">\r\n  <l
 /* 351 */
 /***/ (function(module, exports) {
 
-module.exports = "<div>\r\n\r\n    <menu></menu>\r\n\r\n    <div class=\"tab-content\">\r\n        <div role=\"tabpanel\" class=\"tab-pane active\" id=\"home\">\r\n            <p class=\"user-name-string\">\r\n                <a ui-sref=\"album({albumId: vm.albumId, albumName: vm.albumName})\" rel='nofollow' class=\"color_inherit\"><i class=\"fa fa-chevron-left\" aria-hidden=\"true\"></i></a>\r\n                <i class=\"fa fa-folder\" aria-hidden=\"true\"></i>\r\n                {{vm.albumName}}\r\n            </p>\r\n\r\n            <div class=\"photo--image-wrapper\">\r\n                <img ng-src=\"{{vm.imgSrc}}\" class=\"photo--image\" alt=\"\">\r\n            </div>\r\n            <div class=\"photo--description\">\r\n                <table class=\"photo-details--table\">\r\n                    <tr><td class=\"photo-details--col1\">Created:</td><td>{{vm.imgCreatedTime | date: 'MM/dd/yyyy'}}</td></tr>\r\n                    <tr><td class=\"photo-details--col1\">Description:</td><td>{{vm.imgName}}</td></tr>\r\n                </table>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n";
+module.exports = "<div>\r\n\r\n    <menu section=\"vm.section\"></menu>\r\n\r\n    <div class=\"tab-content\">\r\n        <div role=\"tabpanel\" class=\"tab-pane active\" id=\"home\">\r\n            <p class=\"user-name-string\">\r\n                <a ui-sref=\"album({albumId: vm.albumId, albumName: vm.albumName})\" rel='nofollow' class=\"color_inherit\"><i class=\"fa fa-chevron-left\" aria-hidden=\"true\"></i></a>\r\n                <i class=\"fa fa-folder\" aria-hidden=\"true\"></i>\r\n                {{vm.albumName}}\r\n            </p>\r\n\r\n            <div class=\"photo--image-wrapper\">\r\n                <img ng-src=\"{{vm.imgSrc}}\" class=\"photo--image\" alt=\"\">\r\n            </div>\r\n            <div class=\"photo--description\">\r\n                <table class=\"photo-details--table\">\r\n                    <tr><td class=\"photo-details--col1\">Created:</td><td>{{vm.imgCreatedTime | date: 'MM/dd/yyyy'}}</td></tr>\r\n                    <tr><td class=\"photo-details--col1\">Description:</td><td>{{vm.imgName}}</td></tr>\r\n                </table>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n";
 
 /***/ }),
 /* 352 */
 /***/ (function(module, exports) {
 
-module.exports = "<div>\r\n    <menu></menu>\r\n    <div class=\"tab-content\">\r\n        <div role=\"tabpanel\" class=\"tab-pane active\" id=\"upload\">\r\n            <p class=\"user-name-string\">Upload your photo</p>\r\n            <div class=\"album--list\">\r\n\r\n                <div class=\"form-group\">\r\n                    <label for=\"sel1\">Select an album:</label>\r\n                    <select id=\"album-select\" class=\"form-control\" id=\"sel1\" ng-model=\"vm.currentAlbum\" ng-change=\"selectAlbum()\">\r\n                        <option value=\"\" disabled selected>Please click here and select an album</option>\r\n                        <option ng-repeat=\"album in vm.albums\" value=\"{{album.id}}\">{{album.name}}</option>\r\n                    </select>\r\n                </div>\r\n\r\n                <form action=\"http://facebookgaleryapp-sevas727.rhcloud.com/upload\"\r\n                      dropzone\r\n                      ng-model=\"currentAlbum\"\r\n                      class=\"dropzone\"\r\n                      method=\"POST\"\r\n                      id=\"upload-Invoices\" data-ajax-method=\"POST\" data-ajax=\"true\">\r\n                </form>\r\n\r\n            </div>\r\n        </div>\r\n\r\n    </div>\r\n</div>\r\n</div>\r\n</div>";
+module.exports = "<div>\r\n    <menu section=\"vm.section\"></menu>\r\n    <div class=\"tab-content\">\r\n        <div role=\"tabpanel\" class=\"tab-pane active\" id=\"upload\">\r\n            <p class=\"user-name-string\">Upload your photo</p>\r\n            <div class=\"album--list\">\r\n\r\n                <div class=\"form-group\">\r\n                    <label for=\"sel1\">Select an album:</label>\r\n                    <select id=\"album-select\" class=\"form-control\" id=\"sel1\" ng-model=\"vm.currentAlbum\" ng-change=\"selectAlbum()\">\r\n                        <option value=\"\" disabled selected>Please click here and select an album</option>\r\n                        <option ng-repeat=\"album in vm.albums\" value=\"{{album.id}}\">{{album.name}}</option>\r\n                    </select>\r\n                </div>\r\n\r\n                <form action=\"http://facebookgaleryapp-sevas727.rhcloud.com/upload\"\r\n                      dropzone\r\n                      ng-model=\"currentAlbum\"\r\n                      class=\"dropzone\"\r\n                      method=\"POST\"\r\n                      id=\"upload-Invoices\" data-ajax-method=\"POST\" data-ajax=\"true\">\r\n                </form>\r\n\r\n            </div>\r\n        </div>\r\n\r\n    </div>\r\n</div>\r\n</div>\r\n</div>";
 
 /***/ }),
 /* 353 */

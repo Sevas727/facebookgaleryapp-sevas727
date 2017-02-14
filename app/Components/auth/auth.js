@@ -19,11 +19,9 @@ export default (function() {
             controllerAs: 'vm',
             controller: function(facebookApiSvc){
 
-                this.login = facebookApiSvc.login;
+                let vm = this;
+                    vm.login = facebookApiSvc.login;
 
-            },
-            /*bindings: {
-             count: '='
-             }*/
+            }
         });
 })();

@@ -19,24 +19,36 @@ export default (function() {
             controller: function($stateParams, facebookApiSvc) {
 
                 let vm = this;
-
+                vm.imgName, vm.images, vm.imgSrc;
                 vm.section = 'view';
                 vm.albumId = $stateParams.albumId;
                 vm.albumName = $stateParams.albumName;
                 vm.imgId = $stateParams.imgId;
                 vm.imgCreatedTime = $stateParams.imgCreatedTime;
-                vm.imgName;
+                vm.closestResolution = closestResolution;
 
-                vm.closestResolution = function(imagesArr){
+                getImage();
 
-                    if(imagesArr.length == 0) return;
+                function getImage() {
+                    facebookApiSvc.getImage(vm.imgId)
+                        .then((response) => {
+                            vm.imgName = response.name;
+                            vm.images = response.images;
+                            vm.imgSrc = vm.closestResolution(vm.images);
+                        })
+                }
 
-                    var closestLeft,
+                
+                function closestResolution(imagesArr) {
+
+                    if (imagesArr.length == 0) return;
+
+                    let closestLeft,
                         closestRight,
                         number = window.innerWidth,
                         current;
 
-                    for (var i = 0; i < imagesArr.length; i++) {
+                    for (let i = 0; i < imagesArr.length; i++) {
                         current = imagesArr[i].width;
                         if (imagesArr[i].width < number && (typeof closestLeft === 'undefined' || closestLeft.width < imagesArr[i].width)) {
                             closestLeft = imagesArr[i];
@@ -46,14 +58,6 @@ export default (function() {
                     }
                     return closestLeft.source;
                 }
-
-                facebookApiSvc.getImage(vm.imgId)
-                    .then((response) => {
-                        vm.imgName = response.name;
-                        vm.images = response.images;
-                        vm.imgSrc = vm.closestResolution(vm.images);
-                    })
-
             }
         })
 })();

@@ -66,7 +66,7 @@ import Directives from "./Directives"
 
             $rootScope.$on('$stateChangeStart', function (event, toState) {
 
-                if (facebookApiSvc.isAuth == false && toState.name != 'auth') {
+                if (facebookApiSvc.check() == false && toState.name != 'auth') {
                     event.preventDefault();
                     $state.go('auth');
                 }

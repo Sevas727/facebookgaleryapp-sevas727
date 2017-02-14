@@ -14,24 +14,21 @@ export default (function() {
                 .component('upload', {
                     template: require('./upload.html'),
                     controllerAs: 'vm',
-                    controller: function(facebookApiSvc, $rootScope) {
+                    controller: function(facebookApiSvc) {
 
                         let vm = this;
+                            vm.section = 'upload';
+                            vm.sendImg = facebookApiSvc.sendImg;
+                            vm.currentAlbum = "";
 
-                        $rootScope.section = 'upload';
-                        vm.currentAlbum = "";
+                        getAlbumsID();
 
-                        facebookApiSvc.getAlbumsID()
-                            .then(function(data) {
-                                vm.albums = data;
-                            });
-
-                        vm.catchFile = function(file){
-
+                        function getAlbumsID(){
+                            facebookApiSvc.getAlbumsID()
+                                .then(function(data) {
+                                    vm.albums = data;
+                                });
                         }
-
-                        vm.sendImg = facebookApiSvc.sendImg
-
                     }
                 });
 })();

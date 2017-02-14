@@ -7,10 +7,13 @@ export default (function() {
         .component('menu', {
             template: require("./menu.html"),
             controllerAs: 'vm',
-            controller: function($rootScope, facebookApiSvc){
-                this.section = $rootScope.section;
-                this.logout = facebookApiSvc.logout;
+            bindings: {
+                section: '<'
+            },
+            controller: function(facebookApiSvc){
 
+                let vm = this;
+                vm.logout = facebookApiSvc.logout;
             }
         });
 })();

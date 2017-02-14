@@ -35,20 +35,16 @@ export default (function() {
             },
 
             this.check = function () {
-                if (this.isAuth == true) {
-                    return true;
-                } else {
-                    return false
-                }
-                ;
 
                 $facebook.getLoginStatus()
-                    .then((response)=> {
-                        return response;
-                        if (response.status == "connected") {
+                    .then((res) => {
+                        
+                        if (this.isAuth == true && res.status == "connected") {
                             return true;
-                        }
-                        return false;
+                        } else {
+                            return false
+                        };
+
                     });
 
             },

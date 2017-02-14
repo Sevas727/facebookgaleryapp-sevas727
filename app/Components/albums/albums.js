@@ -16,20 +16,27 @@ export default (function() {
         .component('albums', {
             template: require('./albums.html'),
             controllerAs: 'vm',
-            controller: function ($rootScope, facebookApiSvc) {
+            controller: function (facebookApiSvc) {
 
                 let vm = this;
+                    vm.section = 'view';
 
-                $rootScope.section = 'view';
+                getName();
+                getAlbums();
 
-                facebookApiSvc.getName()
-                    .then(function(data) {
-                        vm.userName = data;
-                    });
-                facebookApiSvc.getAlbums()
-                    .then(function(data) {
-                        vm.albums = data;
-                    });
+                function getName() {
+                    facebookApiSvc.getName()
+                        .then(function (data) {
+                            vm.userName = data;
+                        });
+                }
+
+                function getAlbums() {
+                    facebookApiSvc.getAlbums()
+                        .then(function(data) {
+                            vm.albums = data;
+                        });
+                }
             }
         });
 })();

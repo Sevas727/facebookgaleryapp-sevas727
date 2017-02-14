@@ -31,10 +31,6 @@ module.exports = {
                         'file-loader?name=[name].[ext]' // Any png-image or woff-font below or equal to 10K will be converted to inline base64 instead
                     ]
             },
-            /*{
-                test: /\.gif$/,
-                loader: 'file-loader?name=[name].[ext]',
-            },*/
             {
                 test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
                 loader: 'file-loader?mimetype=image/svg+xml',
